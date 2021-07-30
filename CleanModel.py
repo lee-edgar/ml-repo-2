@@ -120,15 +120,16 @@ acc = hist.history['accuracy'], val_acc = hist.history['val_accuracy'], loss = h
 print('fit time : ', time.time() - start_time )
 
 
-
-testmodel.evaluate(X_test, y_test)
-pred = testmodel.predict(X_val)
-pred = np.argmax(pred, axis=1)
-accuracy_score(y_val, pred)
-
-print(accuracy_score(y_val, pred))
-confusion_matrix(y_val, pred)
-
+def Performance evaluation(y_val, pred):
+    testmodel.evaluate(X_test, y_test)
+    pred = testmodel.predict(X_val)
+    pred = np.argmax(pred, axis=1)
+    weighted = accuracy_score(y_val, pred), recall_score(y_val, pred, average='weighted'), precision_score(y_val, pred, average='weighted'), f1_score(y_val, pred, average='weighted')
+    micro = accuracy_score(y_val, pred), recall_score(y_val, pred, average='micro'), precision_score(y_val, pred, average='micro'), f1_score(y_val, pred, average='micro')
+    macro = accuracy_score(y_val, pred), recall_score(y_val, pred, average='macro'), precision_score(y_val, pred, average='macro'), f1_score(y_val, pred, average='macro')
+    NoneAVG = accuracy_score(y_val, pred), recall_score(y_val, pred, average=None), precision_score(y_val, pred, average=None), f1_score(y_val, pred, average=None)
+    confunsion = confusion_matrix(y_val, pred)
+    return weighted, micro, macro, NoneAVG, confunsion
 
 
 def norm_digit(img):
