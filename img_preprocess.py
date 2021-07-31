@@ -1,10 +1,12 @@
+from typing import ClassVar
 import cv2
 import numpy as np 
 
 testimg = cv2.imread("/Users/jh/Documents/dss/project/ml-repo-2/OCT_small/test/CNV/CNV-3621217-5.jpeg", cv2.IMREAD_COLOR)
 testimg2 = cv2.imread("/Users/jh/Documents/dss/project/ml-repo-2/pptimg/cat.jpg",cv2.IMREAD_COLOR)
 
-#1. CLAHE (compare with HE)
+
+#1. CLAHE 
 def applyclahe(src):
     src = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
     cl = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
@@ -63,6 +65,7 @@ def gaussians(src) :
         savedir = "pptimg/gaussian-" + str(num) + ".jpeg"
         cv2.imwrite(savedir, i)
     return print("complete")
+
 #showandsave(applyclahe(testimg), "pptimg/clahe.jpeg")
 #showandsave(applyhsv(testimg), "pptimg/hsv.jpeg")
 #showandsave(applydog(testimg), "pptimg/dog.jpeg")
@@ -70,4 +73,3 @@ def gaussians(src) :
 #showandsave(applycontour(testimg), "pptimg/contour.jpeg")
 #showandsave(applyclahe(testimg2), "pptimg/clahecat.jpeg")
 
-gaussians(testimg)
