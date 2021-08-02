@@ -13,9 +13,11 @@ def norm_digit(img):
     return dst
 
 
-def mode_change(file, center=False, imgsize = 224, mode = "basic"):
+def mode_change(file, margin=False, center=False, imgsize = 224, mode = "basic"):
     """
-    center : 이미지 중앙에 맞추기 
+    margin : 픽셀값이 255인 픽셀을 0으로 바꾸기 (default = False)
+    -------------------------
+    center : 이미지 중앙에 맞추기 (default = False)
     -------------------------
     [mode]
     "basic" : 전처리 없음
@@ -23,14 +25,18 @@ def mode_change(file, center=False, imgsize = 224, mode = "basic"):
     "subtract" : (원본 이미지) - (Gaussian Blur 적용 이미지)
     "DOG" : (Gaussian Blur를 약하게 적용한 이미지) - (Gaussian Blur를 강하게 적용한 이미지)
     * DOG = difference of Gaussians
-
     """
-    if center:
-        img = cv2.imread(file, 0)
-        img = np.where(img == 255, 0, img)
-        img = norm_digit(img)
+    img = cv2.imread(file, 0)
+
+    if margin:
+        img = np.where(img == 255, 0, img)        
     else : 
-        img = cv2.imread(file, 0)
+        pass
+
+    if center:
+        img = norm_digit(img)
+    else:
+        pass
 
     if mode == "basic":
         pass
