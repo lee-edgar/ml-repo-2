@@ -1,17 +1,23 @@
-# OCT 이미지를 이용한 황반변성 분류 프로젝트
+# OCT 이미지를 이용한 황반질환 분류 프로젝트
 
 
-![jaemin-don-7ZlXsihxD2c-unsplash](https://user-images.githubusercontent.com/80465347/119299360-bb1a1900-bc99-11eb-908b-789de1220f89.jpg)
+![syed-hussaini-3nQ4pIOW2g4-unsplash](https://user-images.githubusercontent.com/80465347/127896461-dc5f95bb-1912-4769-a1d9-c2f96715b5d4.jpg)
 
-
-제주도를 찾는 관광객들이 선택하는 주요 교통수단은 단연 렌트카이지만, (특히 코로나 19의 여파로) 국내 여행지의 대표인 제주도가 점점 더 각광받으면서 대중교통의 이용 또한 증가하고 있습니다. 
-이에 대중교통을 이용하는 관광객의 수를 예측하여 관광지 주변 상권이나 Public Mobile 업체들이 활용할 수 있는 데이터를 만들고자 하였습니다. 
+'황반'이라는 이름은 생소하지만, 망막에서도 시신경과 시세포가 밀집해있고 초점이 맺히는 곳이 바로 황반이기 때문에 그만큼 중요하고 또 예민한 부위입니다. 우리의 시력을 담당한다고도 할 수 있습니다. 그런 만큼 황반에 질환이 생기게 되면 시력이 손상되고 심한 경우 실명으로 이어질 수도 있다고 합니다. 
+문제는 이러한 황반 질환의 경우 조기 진단과 치료가 필요함에도 불구하고 정작 증상 초기에는 뚜렷한 증상이 없거나, 흔히는 노안 증상과 착각하여 진료가 늦어진다는 점입니다.
+이에 이번 프로젝트를 통해 빠른 진단에 도움이 되도록 OCT 이미지에 기반하여 황반 질환을 분류하는 CNN 모델을 만들어보고자 하였습니다.  
+(참고. 프로젝트의 세부적인 내용은 하단의 "최종 발표자료" 링크에서 확인하실 수 있습니다.)
 
 ## 1. Project Summary 
 ### 1.1 목적 
 황반변성 질환(CNV, DME, Drusen) 분류하기 
 
 ### 1.2 결과
+이번 프로젝트에서 최종적으로 가장 성능이 좋았던 케이스는 validation accuracy 0.9802를 기록하였습니다. 
+해당 케이스는 다음과 같습니다.
+- 이미지 처리 : 이미지 중심 이동, CLAHE 적용  
+- CNN : InceptionResNetV2, Imagenet 가중치를 이용한 전이학습
+샘플링을 통해 이미지 데이터셋의 사이즈가 줄어들었다는 것을 감안하면, 충분히 높은 성능으로 볼 수 있을 것 같습니다.  
 (참고. Kaggle에 공개되어있는 모델 중 가장 성능이 좋은 모델이 validation accuracy 0.99를 기록하였습니다.)
 
 ### 1.3 데이터
@@ -22,6 +28,7 @@
 
 - 데이터셋 탐색
 - 샘플링
+- 베이스라인 선정
 - 이미지 처리 기법 적용  
 - CNN 모델 적용  
 
@@ -40,14 +47,42 @@
   - GoogleNet, InceptionV3
   - InceptionResNetV2 
 
-## 2. File List 
+## 2. 세부내용
+### 2.1 데이터셋 탐색
+- 데이터셋의 Class는 총 4개로, CNV, DME, Drusen 그리고 Normal Class입니다.
+- Train Set 83,484장, Test Set 1,000장이 있으며, 각 파일 제목은 "Class-환자ID-사진번호"의 형식으로 구성되어 있습니다.(예시: CNV-53018-1.jpeg)
+- 그런데 제공된 데이터셋에서 데이터 오염의 가능성이 있는 문제점들을 세 가지 발견하였습니다. 
+  1) 한 환자가 두 가지 증상을 동시에 보이는 경우가 존재하였습니다.
+  2) 동일 환자가 Train Set에도, Test Set에도 포함되어 있었습니다.
+  3) 환자당 사진의 수가 불균형하여, 적게는 1장, 많게는 한 환자당 800장까지도 반영되어 있었습니다.
+- 이에 샘플링을 진행하기로 결정하였습니다.
+ 
+### 2.2 샘플링
+- 두 개 이상의 증상을 가진 환자들을 제외하기 위해, 단일 증상 환자의 데이터만 필터링하였습니다.
+- 기존의 Test set을 사용하지 않고, 환자 ID를 기준으로 Train Set과 Test Set을 다시 구분하였습니다. 다시 말해, 샘플링을 거친 후 Train Set에 포함된 환자는 Test Set에 속하지 않습니다.
+- 환자 ID 1개 당 이미지 1장으로 랜덤 샘플링을 진행하였습니다.
+- 최종적으로 7,099장의 이미지를 사용하게 되었습니다.
 
--  JejuRegion.py : 권역 그룹핑을 위한 모듈 
--  jeju_datahub_api : 제주데이터허브 API 이용하기 
--  jeju_visualization_map : pydeck을 이용한 제주도 지역별 버스 이용량 시각화  
--  df_regression.csv : regression 용 데이터프레임 파일
--  jeju_clustering.ipynb : 버스 이용객을 대상으로 한 kmeans clustering
--  jeju_regression_part2.ipynb : 회귀분석 
+### 2.3 베이스라인 선정
+- 베이스라인 선정을 위해 적용했던 CNN 모델들은 LeNet, VGG16, VGG19, 그리고 MobileNet입니다.
+- 이 중 LeNet, VGG16, VGG19는 학습이 잘 진행되지 않았고, MobileNet은 validation accuracy 0.8801을 기록하였습니다. 
+- 이에 0.8801을 기준으로 이미지 처리와 다른 CNN 모델 적용을 통해 성능을 높여가기로 하였습니다. 
+ 
+### 2.4 이미지 처리 기법 적용
+
+- 이미지 처리는 기본적으로 CLAHE, DoG, Contour, HSV 조절 의 방법을 사용하였으며, 추가적으로 DoG를 변형하여 원본 이미지에서 가우시안 필터를 적용한 이미지를 빼는 방법을 사용하였습니다.(임의로 Subtraction이라는 명칭을 사용하였습니다.)
+- 위 방법 중 두 개 이상 조합하거나, 이미지 이진화 등 다른 기법과 함께 조합하기도 했습니다.
+- 또한 이미지가 치우쳐있는 경우가 많아 중앙으로 이동시키는 것도 진행해보았습니다.
+- 결과적으로 원본 이미지를 중앙으로 이동시켰을 때, 그리고 CLAHE를 적용했을 때 모델의 성능이 가장 좋았습니다.  
+ 
+### 2.4 CNN 모델 적용 
+
+
+## 3. File List 
+
+-  ImgFilter.py : 이미지 처리를 위한 모듈 
+-  img_preprocess.py : 사용한 이미지 처리 기법들 
+-  img_preprocess_fail.py : 실패한 이미지 처리 기법들
 
 
 ## 3. Contributors
@@ -57,8 +92,7 @@
 
 ## 4. What We Learned, and more... 
 
-- DASK를 사용하면서 필요한 데이터만 가져와서 처리하거나, 최대한 간결하게 작동할 수 있는 코드를 작성하는 등 작업 효율에 대한 고민을 깊게 할 수 있었습니다. 다만 DASK에 적응하는 시간이 소요되면서 프로젝트 착수가 약간 늦어지고, 그만큼 모델 성능 향상을 위한 개선 작업을 단축시켜야 했던 점은 아쉽습니다. 지속적으로 후속 작업들을 이어갈 예정입니다. 
-- 추후 제주 지역에서 일레클, ZET와 같은 공유 모빌리티 / 라스트마일 서비스 업체들의 적절한 정류장 위치 선정을 위한 이용자 수 예측이나, 가동률 예측 등 대중교통 이용 관광객 수를 이용한 심화된 프로젝트를 진행해보고 싶습니다.  
+- Kaggle 공개 코드들에서는 데이터셋 탐색을 진행한 경우를 찾아보지 못했지만, 충분히 문제가 될 수 있는 케이스들이 다수 존재하였습니다. 데이터셋 탐색부터 꼼꼼하게 진행하는 것이 중요하다는 것을 다시금 배웠습니다.  
 
 ## 5. Acknowledgments 
 
@@ -67,5 +101,5 @@
 
 ## 프레젠테이션 
 
-* [최종 발표자료](https://drive.google.com/file/d/1yByxhh9NdsVLmhzN3Y-tGkHe22ZX3taA/view?usp=sharing)
+* [최종 발표자료](https://drive.google.com/file/d/14zlx6sMUkVf-FzUKgFtDZxHWyBqisQj4/view?usp=sharing)
 * https://unsplash.com/photos/3nQ4pIOW2g4?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
