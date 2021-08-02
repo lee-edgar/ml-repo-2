@@ -3,6 +3,16 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#ignore dirs
+oldfiles/
+OCT_sampling/
+OCT2017/
+OCT_hsv/
+OCT_imgcontour/
+OCT_small/
+OCT_cl_imgcontour/
+
+
 # C extensions
 *.so
 
