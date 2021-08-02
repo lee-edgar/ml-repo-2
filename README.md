@@ -102,4 +102,4 @@
 ## 프레젠테이션 
 
 * [최종 발표자료](https://drive.google.com/file/d/14zlx6sMUkVf-FzUKgFtDZxHWyBqisQj4/view?usp=sharing)
-* https://unsplash.com/photos/3nQ4pIOW2g4?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+* [이미지 출처](https://unsplash.com/photos/3nQ4pIOW2g4?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink)
