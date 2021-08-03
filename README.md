@@ -76,6 +76,13 @@
 - 결과적으로 원본 이미지를 중앙으로 이동시켰을 때, 그리고 CLAHE를 적용했을 때 모델의 성능이 가장 좋았습니다.  
  
 ### 2.4 CNN 모델 적용 
+- 랜덤 샘플링을 통해 이미지 개수를 대폭 감소하였기 때문에, Transfer Learning을 사용하였으며,
+Fine Tuned Convolution Network를 사용해 CNN의 Fully Connected Layer를 변경하여 사용하였습니다.
+- CLAHE, Transfer Learning, 이미지 중앙화를 고정옵션으로 두고, Best Accuracy를 찾기 위해 다양한 모델을 적용해 보았습니다.
+- 여러 모델 적용 중 Res Net, Inception 계열의 모델들이 높은 Accuracy를 보여주었습니다.
+- Drusen 분류에는 Inception v3 모델 성능이 가장 좋았습니다.
+- Inception v4, Residual Network를 결합한 Inception Res Net v2 모델은 전체적인 성능(4 class 분류)에서 가장 좋았습니다.
+
 
 
 ## 3. File List 
