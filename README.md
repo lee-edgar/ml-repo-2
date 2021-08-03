@@ -84,13 +84,12 @@ Fine Tuned Convolution Network를 사용해 CNN의 Fully Connected Layer를 변�
 - Inception v4, Residual Network를 결합한 Inception Res Net v2 모델은 전체적인 성능(4 class 분류)에서 가장 좋았습니다.
 
 
-
 ## 3. File List 
 
 -  ImgFilter.py : 이미지 처리를 위한 모듈 
 -  img_preprocess.py : 사용한 이미지 처리 기법들 
 -  img_preprocess_fail.py : 실패한 이미지 처리 기법들
-
+-  CleanModelV2.py : 딥러닝 처리를 위한 py
 
 ## 3. Contributors
 
@@ -99,7 +98,8 @@ Fine Tuned Convolution Network를 사용해 CNN의 Fully Connected Layer를 변�
 
 ## 4. What We Learned, and more... 
 
-- Kaggle 공개 코드들에서는 데이터셋 탐색을 진행한 경우를 찾아보지 못했지만, 충분히 문제가 될 수 있는 케이스들이 다수 존재하였습니다. 데이터셋 탐색부터 꼼꼼하게 진행하는 것이 중요하다는 것을 다시금 배웠습니다.  
+- Kaggle 공개 코드들에서는 데이터셋 탐색을 진행한 경우를 찾아보지 못했지만, 충분히 문제가 될 수 있는 케이스들이 다수 존재하였습니다. 데이터셋 탐색부터 꼼꼼하게 진행하는 것이 중요하다는 것을 다시금 배웠습니다.
+- 학습 데이터의 양이 충분하지 못할 경우 Transfer Learning이 필요하며, Transfer Learning은 모델 튜닝과 Fine Tuned Convolution Network방식을 사용하여 Deep한 Layer를 구성하여 더 좋은 성능을 이끌어 낼 수 있다는걸 배웠습니다. 앞으로 Transfer Learning에 대해서 더 연구하고자 합니다. 
 
 ## 5. Acknowledgments 
 
